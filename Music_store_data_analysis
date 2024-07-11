@@ -1,0 +1,12 @@
+### Music store analysis 
+Q1) Who is the senior most employee based on job title?
+ 
+select first_name,last_name,levels
+from employee
+order by levels desc
+limit 1;
+
+Q2)Which countries have the most invoices?
+select billing_country ,count(*) as c from invoice
+group by billing_country
+order by c desc;
