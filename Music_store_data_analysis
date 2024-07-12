@@ -10,3 +10,157 @@ Q2)Which countries have the most invoices?
 select billing_country ,count(*) as c from invoice
 group by billing_country
 order by c desc;
+
+Q3)what are the top 3 value of invoice
+select billing_country ,count(*) as c from invoice
+group by billing_country
+order by c desc;
+
+Q4)which city has the best customers?we would like to throw a promotional music festival in the city we made the most money .write a query that return on city that has the highest sum of invoices totals.
+return both the city and sum of all invoices totals 
+
+select billing_city,sum(total)as t
+from invoice
+group by billing_city
+order by t desc
+limit 1
+
+Q5)who is the best customer? the customr who has spent the most money will be declared the best customer.
+write a query that returns the person who has spent the most money.
+
+select first_name,last_name,sum(total) as total
+from customer as c
+inner join invoice using(customer_id)
+group by c.customer_id
+order by total desc
+limit 1
+
+##### MODERATE QUESTIONS
+
+Q6)WAQ to return name and genre of all rock music listiners. return your list ordered alphabetically by email starting with A
+
+select DISTINCT c.email,c.first_name,c.last_name
+from customer c
+join invoice using(customer_id)
+join invoice_line using (invoice_id)
+where track_id IN(select track_id from track 
+	join genre using (genre_id)
+	where genre.name like 'Rock')
+order by c.email;
+
+
+Q7)lets invite the artist who have written the most rock music in our dataset
+return the artist name and total track count of the top 10 rock bands
+
+select a.artist_id ,a.name ,count(a.artist_id) as ar
+from track
+join album using(album_id)
+join artist as a using (artist_id)
+join genre using(genre_id)
+	where genre.name like 'Rock'
+group by a.artist_id
+order by ar desc
+	limit 10;
+
+Q8)return all the track names that have a song length longer than the average song length .
+return the name and millseconds for each track .
+order by the song length with the longest listed first.
+
+select name, milliseconds
+from track 
+where milliseconds>(select avg(milliseconds) as avg_track_length from track)
+order by milliseconds desc;
+ 
+
+#### ADVANCED QUESTIONS
+
+Q9) find how much amount spend by each customer on artists?
+return customer name ,artist name,and total spent
+with best_selling_artist as(select ar.artist_id as artist_id, ar.name as artist_name, sum (il.unit_price* il.quantity) as total_sales 
+	from invoice_line il
+	join track using(track_id)
+	join album using(album_id)
+	join artist as ar using(artist_id)
+	group by 1
+	order by 3 desc
+	limit 1)
+select c.customer_id, c.first_name ,c.last_name, bsa.artist_name, sum (il.unit_price* il.quantity) as amount_spent
+from invoice
+join customer c using (customer_id)
+join invoice_line il using (invoice_id)
+join track using(track_id)
+join album using (album_id)
+join best_selling_artist bsa using (artist_id)
+group by 1,2,3,4
+order by 5 desc;
+
+
+Q10) we want to find out the most popular music genre for each country  we determine the most popular as the genre with the highest 
+amount of purchase .
+write query to return each country along with the top genre .
+fpr the country where max no. of purchases
+is shared return all genre
+
+with most_popular_genre as(select g.name,g.genre_id, customer.country, count(il.quantity) as purchase,
+	row_number()over(partition by customer.country order by count(il.quantity) desc) as rowno
+	from invoice_line il
+	join invoice i using(invoice_id)
+	join customer using(customer_id)
+	join track using (track_id)
+	join genre g using (genre_id)
+	group by 1,2,3
+	order by 4 asc,3 desc)
+select*from most_popular_genre where rowno<=1
+
+//////or with recursive most_popular_genre as(select g.name,g.genre_id, customer.country, count(*) as purchase
+	from invoice_line il
+	join invoice i using(invoice_id)
+	join customer using(customer_id)
+	join track using (track_id)
+	join genre g using (genre_id)
+	group by 1,2,3
+	order by 4 asc,3 desc),
+ max_genre_per_country as (select max(purchase)as max_genre_number,country
+	from most_popular_genre
+	group by 2
+	order by 2)
+
+select most_popular_genre.*
+from most_popular_genre
+join max_genre_per_country using (country)
+where most_popular_genre.purchase= max_genre_per_country.max_genre_number
+
+
+
+
+Q11) write a query that determines the customer yhat has spent the most on music for each country and 
+how much the spent. for countries where the top amount spent is shared,provided all the customers who spent this amount
+
+
+with max_spend_customer as(select c.customer_id,c.first_name,c.last_name, sum(i.total) as max_spent ,billing_country,
+row_number()over(partition by billing_country order by sum(i.total) desc) as rowno
+from customer c
+join invoice i using(customer_id)
+group by 1,2,3,5
+order by 5 asc,4 desc
+)
+select * from max_spend_customer where rowno<=1
+
+
+// ANOTHER METHOD
+
+with recursive max_spend_customer as(select c.customer_id,c.first_name,c.last_name, sum(i.total) as max_spent ,billing_country
+              from customer c
+              join invoice i using(customer_id)
+              group by 1,2,3,5
+              order by 1,4 desc),
+         country_max_spent as( select billing_country , max(max_spent) as max_spending
+               from max_spend_customer ms
+               group by ms.billing_country)
+
+select *
+from  max_spend_customer
+join country_max_spent using (billing_country)
+
+
+
