@@ -16,33 +16,37 @@ This repository contains various SQL projects that demonstrate my skills in data
   - Insights on sales performance by location and product.
   - Cleaning and preparing datasets for analysis to ensure data quality.
   - DATA Visualization using POWER BI.
-  
-### 2. Music Store Analysis
-- **Description:** Analyzing sales and inventory data for a fictional music store.
-- **Key Features:**
-  - Sales trends analysis by genre and artist.
-  - Inventory management insights.
+  ### Recent Dashboard: PIZZAHUT Sales Dashboard USING POWER BI.
+![Pizzahut sales Dashboard](https://github.com/TasmiyaChaman/PracticeSQL/blob/main/pizzahut%20sales%20dashboard.pdf)
 
-### 3. Book Store Analysis
+
+### 2. Book Store Analysis
 - **Description:** Analyzing customer purchases and inventory for a book store.
 - **Key Features:**
   - Customer behavior insights based on purchase history.
   - Analysis of best-selling genres and authors.
+### Recent Dashboard: Book Store Dashboard
+![Pizzahut sales Dashboard](https://github.com/TasmiyaChaman/PracticeSQL/blob/main/Book%20store%20Dashboard.png)
 
-### 4. Road Accidents Dashboard
+
+### 3. Road Accidents Dashboard
 - **Description:** A dashboard providing insights into road accidents data.
 - **Key Features:**
   - Visualization of accident trends by location and time.
   - Filters for analyzing specific accident types.
-
-## Dashboard
-
-### Recent Dashboard: PIZZAHUT Sales Dashboard
-![Pizzahut sales Dashboard](link_to_your_dashboard_image.png)
-
+  ### Recent Dashboard:  Road Accidents Dashboard
+![Pizzahut sales Dashboard](https://github.com/TasmiyaChaman/PracticeSQL/blob/main/Road%20Accidents%20Dashboard.png)
 - **Description:** This dashboard provides a visual representation of road accident data, showcasing trends and patterns.
 - **Features:**
   - Interactive charts and maps displaying accident frequency.
   - Filters for location, time, and accident severity.
   - Data sourced from the Road Accidents project.
+
+### 4. Music Store Analysis
+- **Description:** Analyzing sales and inventory data for a fictional music store.
+- **Key Features:**
+  - Sales trends analysis by genre and artist.
+  - Inventory management insights.
+
+
 
